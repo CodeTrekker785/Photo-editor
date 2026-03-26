@@ -2,39 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Photo to Video</title>
   <style>
+    :root {
+      --primary: #6366f1;
+      --bg: #0f172a;
+      --card: #1e293b;
+    }
     body {
-      font-family: Arial;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: var(--card);
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      width: 90%;
+      max-width: 500px;
+    }
+    input, textarea, button {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      box-sizing: border-box;
+    }
+    textarea {
       background: #0f172a;
       color: white;
-      text-align: center;
-      padding: 20px;
+      resize: vertical;
+      min-height: 80px;
     }
-    input, button {
-      margin: 10px;
-      padding: 10px;
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
     video {
-      margin-top: 20px;
-      width: 300px;
+      margin-top: 1rem;
+      width: 100%;
+      border-radius: 8px;
+      display: none; /* Hidden until generated */
+    }
+    .status {
+      font-size: 0.9rem;
+      color: #94a3b8;
     }
   </style>
 </head>
 <body>
 
-  <h1>🎬 Photo to Video Generator</h1>
+  <div class="container">
+    <h1>🎬 AI Video Gen</h1>
+    
+    <label for="imageUpload">Upload Portrait</label>
+    <input type="file" id="imageUpload" accept="image/*">
 
-  <input type="file" id="imageUpload" accept="image/*"><br>
-  <textarea id="textInput" placeholder="Enter text for voice"></textarea><br>
+    <textarea id="textInput" placeholder="What should the character say?"></textarea>
 
-  <button onclick="generateVideo()">Generate Video</button>
+    <button id="genBtn" onclick="generateVideo()">Generate Video</button>
+    <p id="status" class="status"></p>
 
-  <video id="videoPlayer" controls></video>
+    <video id="videoPlayer" controls></video>
+  </div>
 
   <script>
     async function generateVideo() {
-      alert("This is frontend only. Backend needed for real AI processing.");
+      const img = document.getElementById('imageUpload').files[0];
+      const text = document.getElementById('textInput').value;
+      const btn = document.getElementById('genBtn');
+      const status = document.getElementById('status');
+      const video = document.getElementById('videoPlayer');
+
+      if (!img || !text) {
+        alert("Please upload an image and enter some text!");
+        return;
+      }
+
+      // UI Feedback
+      btn.disabled = true;
+      btn.innerText = "Processing...";
+      status.innerText = "Uploading to AI Engine...";
+
+      try {
+        // --- THIS IS WHERE THE MAGIC HAPPENS ---
+        // You would typically use FormData to send files to a server
+        // const formData = new FormData();
+        // formData.append('image', img);
+        // formData.append('script', text);
+        
+        // Mocking a 3-second delay to simulate AI processing
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        status.innerText = "Generation complete!";
+        btn.innerText = "Generate Video";
+        btn.disabled = false;
+        
+        // Show the video (In reality, you'd set video.src to the URL returned by your API)
+        // video.src = "your-api-result.mp4";
+        // video.style.display = "block";
+        
+        alert("Backend simulated! Link your API (like D-ID, HeyGen, or Runway) here.");
+      } catch (error) {
+        status.innerText = "Error generating video.";
+        btn.disabled = false;
+      }
     }
   </script>
 
